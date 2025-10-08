@@ -31,14 +31,15 @@ android {
     kotlinOptions {
         jvmTarget = "11"
     }
+    buildFeatures {
+        buildConfig = true
+        compose = true
+    }
 }
 
 dependencies {
-
     implementation(projects.domain)
-
-    // Injection Koin
-    implementation(libs.koin.android)
+    implementation(projects.commonUi)
 
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.lifecycle.runtime.ktx)
@@ -51,6 +52,17 @@ dependencies {
 
     implementation(libs.androidx.appcompat)
 //    implementation(libs.material)
+
+    // Injection Koin
+    implementation(libs.koin.android)
+    implementation(libs.koin.androidx.compose) // koinViewModel
+//    implementation(libs.koin.androidx.compose.navigation)
+
+    // Navigation
+    implementation(libs.androidx.navigation.compose)
+
+    // Permission
+    implementation(libs.accompanist.permissions)
 
     testImplementation(libs.junit)
     androidTestImplementation(libs.androidx.junit)

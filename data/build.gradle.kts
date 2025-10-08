@@ -39,6 +39,9 @@ dependencies {
     // Injection Koin
     implementation(libs.koin.android)
 
+    // Location
+    implementation(libs.play.services.location)
+
     implementation(libs.androidx.core.ktx)
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
