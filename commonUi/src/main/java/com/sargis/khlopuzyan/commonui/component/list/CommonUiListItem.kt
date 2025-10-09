@@ -1,26 +1,27 @@
 package com.sargis.khlopuzyan.commonui.component.list
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.BorderStroke
 import androidx.compose.foundation.background
-import androidx.compose.foundation.border
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxHeight
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.material3.Icon
-import androidx.compose.material3.LocalContentColor
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.drawBehind
+import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.painterResource
@@ -30,7 +31,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.sargis.khlopuzyan.commonui.CommonUiTypography900
+import com.sargis.khlopuzyan.commonui.CommonUiTheme
 import com.sargis.khlopuzyan.commonui.R
 
 @Composable
@@ -58,42 +59,59 @@ private fun CommonUiListItem(
     rightIconContentDescription: String = "",
 
     enabled: Boolean = true,
-    border: BorderStroke? = null,
+    showDivider: Boolean = false,
+
     attributes: CommonUiListItemAttributes = CommonUiListItemAttributes.Medium,
     onClick: () -> Unit = {},
 ) {
+
     Row(
         modifier = modifier
             .height(attributes.height)
-            .padding(attributes.contentPadding)
-            .also { m ->
-                border?.let {
-                    m.border(border)
-                }
-                if (enabled) {
-                    m.clickable {
-                        onClick()
+            .fillMaxWidth()
+            .background(MaterialTheme.colorScheme.background)
+            .run {
+                if (showDivider) {
+                    drawBehind {
+                        val borderWidthPx = with(density) { attributes.dividerHeight.toPx() }
+                        drawLine(
+                            color = attributes.dividerColor,
+                            start = Offset(0f, size.height - borderWidthPx), // Start at bottom left
+                            end = Offset(
+                                size.width,
+                                size.height - borderWidthPx
+                            ), // End at bottom right
+                            strokeWidth = borderWidthPx
+                        )
                     }
-                }
-            },
+                } else this
+
+            }
+            .clickable(
+                enabled = enabled,
+//                indication = rememberRipple(), // Or null if no ripple is desired
+//                interactionSource = remember { MutableInteractionSource() }
+            ) {
+                onClick()
+            }
+            .padding(attributes.contentPadding),
         verticalAlignment = Alignment.CenterVertically,
-//        horizontalArrangement = Arrangement.SpaceBetween
     ) {
         when {
             leftIconResId != null -> {
                 Icon(
-                    modifier = Modifier.size(attributes.iconSize),
+                    modifier = Modifier.size(attributes.leftIconSize),
                     painter = painterResource(id = leftIconResId),
-                    tint = if (leftIconTint != Color.Unspecified) leftIconTint else LocalContentColor.current,
+                    tint = leftIconTint,
                     contentDescription = leftIconContentDescription,
                 )
             }
 
             leftImageVector != null -> {
                 Icon(
-                    modifier = Modifier.size(attributes.iconSize),
+                    modifier = Modifier.size(attributes.leftIconSize),
                     imageVector = leftImageVector,
-                    tint = if (leftIconTint != Color.Unspecified) leftIconTint else LocalContentColor.current,
+                    tint = leftIconTint,
                     contentDescription = leftIconContentDescription,
                 )
             }
@@ -105,12 +123,15 @@ private fun CommonUiListItem(
 
         if (content != null) {
             Column(
-                modifier = Modifier.weight(1f),
+                modifier = Modifier
+                    .fillMaxHeight()
+                    .weight(1f),
                 verticalArrangement = Arrangement.Center
             ) {
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = title,
+                    color = MaterialTheme.colorScheme.onTertiary,
                     style = attributes.titleStyle,
                     textAlign = TextAlign.Start,
                     maxLines = titleMaxLines,
@@ -121,6 +142,7 @@ private fun CommonUiListItem(
                 Text(
                     modifier = Modifier.fillMaxWidth(),
                     text = content,
+                    color = MaterialTheme.colorScheme.onTertiary,
                     style = attributes.contentStyle,
                     textAlign = TextAlign.Start,
                     maxLines = contentMaxLines,
@@ -132,6 +154,7 @@ private fun CommonUiListItem(
             Text(
                 modifier = Modifier.weight(1f),
                 text = title,
+                color = MaterialTheme.colorScheme.onTertiary,
                 style = attributes.titleStyle,
                 textAlign = TextAlign.Start,
                 maxLines = titleMaxLines,
@@ -147,18 +170,18 @@ private fun CommonUiListItem(
         when {
             rightIconResId != null -> {
                 Icon(
-                    modifier = Modifier.size(attributes.iconSize),
+                    modifier = Modifier.size(attributes.leftIconSize),
                     painter = painterResource(id = rightIconResId),
-                    tint = if (rightIconTint != Color.Unspecified) rightIconTint else LocalContentColor.current,
+                    tint = rightIconTint,
                     contentDescription = rightIconContentDescription,
                 )
             }
 
             rightImageVector != null -> {
                 Icon(
-                    modifier = Modifier.size(attributes.iconSize),
+                    modifier = Modifier.size(attributes.leftIconSize),
                     imageVector = rightImageVector,
-                    tint = if (rightIconTint != Color.Unspecified) rightIconTint else LocalContentColor.current,
+                    tint = rightIconTint,
                     contentDescription = rightIconContentDescription,
                 )
             }
@@ -168,7 +191,7 @@ private fun CommonUiListItem(
 
 @Composable
 fun CommonUiListItemSmall(
-    modifier: Modifier = Modifier.fillMaxWidth(),
+    modifier: Modifier = Modifier,
 
     title: String,
     titleMaxLines: Int = 1,
@@ -191,7 +214,8 @@ fun CommonUiListItemSmall(
     rightIconContentDescription: String = "",
 
     enabled: Boolean = true,
-    border: BorderStroke? = null,
+    showDivider: Boolean = false,
+
     onClick: () -> Unit = {},
 ) {
     CommonUiListItem(
@@ -218,7 +242,8 @@ fun CommonUiListItemSmall(
         rightIconContentDescription = rightIconContentDescription,
 
         enabled = enabled,
-        border = border,
+        showDivider = showDivider,
+
         attributes = CommonUiListItemAttributes.Small,
         onClick = onClick
     )
@@ -226,7 +251,7 @@ fun CommonUiListItemSmall(
 
 @Composable
 fun CommonUiListItemMedium(
-    modifier: Modifier = Modifier.fillMaxWidth(),
+    modifier: Modifier = Modifier,
 
     title: String,
     titleMaxLines: Int = 1,
@@ -249,7 +274,8 @@ fun CommonUiListItemMedium(
     rightIconContentDescription: String = "",
 
     enabled: Boolean = true,
-    border: BorderStroke? = null,
+    showDivider: Boolean = false,
+
     onClick: () -> Unit = {},
 ) {
     CommonUiListItem(
@@ -276,7 +302,8 @@ fun CommonUiListItemMedium(
         rightIconContentDescription = rightIconContentDescription,
 
         enabled = enabled,
-        border = border,
+        showDivider = showDivider,
+
         attributes = CommonUiListItemAttributes.Medium,
         onClick = onClick
     )
@@ -284,7 +311,7 @@ fun CommonUiListItemMedium(
 
 @Composable
 fun CommonUiListItemLarge(
-    modifier: Modifier = Modifier.fillMaxWidth(),
+    modifier: Modifier = Modifier,
 
     title: String,
     titleMaxLines: Int = 1,
@@ -307,7 +334,8 @@ fun CommonUiListItemLarge(
     rightIconContentDescription: String = "",
 
     enabled: Boolean = true,
-    border: BorderStroke? = null,
+    showDivider: Boolean = false,
+
     onClick: () -> Unit = {},
 ) {
     CommonUiListItem(
@@ -334,178 +362,79 @@ fun CommonUiListItemLarge(
         rightIconContentDescription = rightIconContentDescription,
 
         enabled = enabled,
-        border = border,
+        showDivider = showDivider,
+
         attributes = CommonUiListItemAttributes.Large,
         onClick = onClick
     )
 }
 
-//
-//@Composable
-//fun CommonUiSecondaryListItem(
-//    modifier: Modifier = Modifier,
-//    text: String,
-//    enabled: Boolean = true,
-//    @DrawableRes iconResId: Int? = null,
-//    imageVector: ImageVector? = null,
-//    iconTint: Color = Color.Unspecified,
-//    iconContentDescription: String = "",
-//    textLetterSpacing: TextUnit = 0.sp,
-//    maxLines: Int = 1,
-//    overflow: TextOverflow = TextOverflow.Ellipsis,
-//    attributes: CommonUiListItemAttributes = CommonUiListItemAttributes.Medium,
-//    onClick: () -> Unit = {},
-//) {
-//    val borderColor: Color = if (enabled) colorBlack else colorGray_11
-//
-//    val colors = ButtonDefaults.buttonColors(
-//        containerColor = colorWhite,
-//        contentColor = colorBlack,
-//        disabledContainerColor = colorWhite,
-//        disabledContentColor = colorGray_11,
-//    )
-//
-//    CommonUiListItem(
-//        modifier = modifier,
-//        text = text,
-//        enabled = enabled,
-//        leftIconResId = iconResId,
-//        leftImageVector = imageVector,
-//        leftIconTint = iconTint,
-//        leftIconContentDescription = iconContentDescription,
-//        textLetterSpacing = textLetterSpacing,
-//        maxLines = maxLines,
-//        overflow = overflow,
-//        colors = colors,
-//        border = BorderStroke(width = attributes.borderStrokeWidth, color = borderColor),
-//        attributes = attributes,
-//        onClick = onClick,
-//    )
-//}
-//
-//@Composable
-//fun CommonUiContainerListItem(
-//    onClick: () -> Unit,
-//    modifier: Modifier = Modifier,
-//    enabled: Boolean = true,
-//    contentColor: Color = Color.White,
-//    shape: Shape = RectangleShape,
-//    content: @Composable () -> Unit,
-//) = Box(
-//    modifier = modifier
-//        .clip(shape)
-//        .clickable(
-//            onClick = onClick,
-//            enabled = enabled,
-//            role = Role.Button,
-//        ),
-//    contentAlignment = Alignment.Center,
-//) {
-//    CompositionLocalProvider(
-//        LocalContentColor provides contentColor,
-//        content = content,
-//    )
-//}
-
 @Composable
 @Preview
 private fun CommonUiListItemsPreviews() {
-    Column(
-        modifier = Modifier
-            .background(Color.Cyan),
-        verticalArrangement = Arrangement.spacedBy(8.dp),
-    ) {
-        CommonUiListItemSmall(
-            title = "Title".uppercase(),
-        )
-
-        CommonUiListItemSmall(
-            title = "Title".uppercase(),
-            content = "Content".uppercase()
-        )
-
-        CommonUiListItemSmall(
-            title = "Title".uppercase(),
-            content = "Content".uppercase(),
-            leftIconResId = R.drawable.ic_info_circle,
-            rightIconResId = R.drawable.ic_info_circle,
-        )
-
-
-        CommonUiListItemMedium(
-            title = "Title".uppercase(),
-        )
-
-        CommonUiListItemMedium(
-            title = "Title".uppercase(),
-            content = "Content".uppercase(),
-        )
-
-        CommonUiListItemMedium(
-            title = "Title".uppercase(),
-            content = "Content".uppercase(),
-            leftIconResId = R.drawable.ic_info_circle,
-            rightIconResId = R.drawable.ic_info_circle,
-        )
-
-
-
-        CommonUiListItemLarge(
-            title = "Text".uppercase(),
-        )
-
-        CommonUiListItemLarge(
-            title = "Text".uppercase(),
-            content = "Content".uppercase(),
-        )
-
-        CommonUiListItemLarge(
-            title = "Title".uppercase(),
-            content = "Content".uppercase(),
-            leftIconResId = R.drawable.ic_info_circle,
-            rightIconResId = R.drawable.ic_info_circle,
-        )
-
-        CommonUiListItem(
-            title = "Title".uppercase(),
-            attributes = CommonUiListItemAttributes.DynamicListItem(
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                cornerRadius = 10.dp,
-                titleStyle = CommonUiTypography900.bodyMedium,
-                iconSize = 19.dp,
-                spaceBetweenIconAndText = 6.8.dp,
-                borderStrokeWidth = 4.dp,
-            ),
-            leftIconResId = R.drawable.ic_info_circle,
-            rightIconResId = R.drawable.ic_info_circle,
-        )
-
-        CommonUiListItem(
-            title = "Title".uppercase(),
-            content = "Content".uppercase(),
-            attributes = CommonUiListItemAttributes.DynamicListItem(
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                cornerRadius = 10.dp,
-                titleStyle = CommonUiTypography900.bodyMedium,
-                iconSize = 19.dp,
-                spaceBetweenIconAndText = 6.8.dp,
-                borderStrokeWidth = 4.dp,
+    CommonUiTheme {
+        Column(
+            modifier = Modifier
+                .fillMaxSize()
+                .background(Color.White),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            CommonUiListItemSmall(
+                title = "Title\ntitle2\ntitle3".uppercase(),
+                showDivider = true
             )
-        )
 
-        CommonUiListItem(
-            title = "Title".uppercase(),
-            content = "Content".uppercase(),
-            attributes = CommonUiListItemAttributes.DynamicListItem(
-                contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                cornerRadius = 10.dp,
-                titleStyle = CommonUiTypography900.bodyMedium,
-                iconSize = 19.dp,
-                spaceBetweenIconAndText = 6.8.dp,
-                borderStrokeWidth = 4.dp,
-            ),
-            leftIconResId = R.drawable.ic_info_circle,
-            rightIconResId = R.drawable.ic_info_circle,
-        )
+            CommonUiListItemSmall(
+                title = "Title\ntitle2\ntitle3".uppercase(),
+                content = "Content\ncontent2\ncontent3".uppercase(),
+                showDivider = true
+            )
+
+            CommonUiListItemSmall(
+                title = "Title\ntitle2\ntitle3".uppercase(),
+                content = "Content\ncontent2\ncontent3".uppercase(),
+                leftIconResId = R.drawable.ic_info_circle,
+                rightIconResId = R.drawable.ic_info_circle,
+                showDivider = true
+            )
+
+            CommonUiListItemMedium(
+                title = "Title\ntitle2\ntitle3".uppercase(),
+                showDivider = true
+            )
+
+            CommonUiListItemMedium(
+                title = "Title\ntitle2\ntitle3".uppercase(),
+                content = "Content\ncontent2\ncontent3".uppercase(),
+                showDivider = true
+            )
+
+            CommonUiListItemMedium(
+                title = "Title\ntitle2\ntitle3".uppercase(),
+                content = "Content\ncontent2\ncontent3".uppercase(),
+                leftIconResId = R.drawable.ic_info_circle,
+                rightIconResId = R.drawable.ic_info_circle,
+                showDivider = true
+            )
+
+            CommonUiListItemLarge(
+                title = "Title\ntitle2\ntitle3".uppercase(),
+                showDivider = true
+            )
+
+            CommonUiListItemLarge(
+                title = "Title\ntitle2\ntitle3".uppercase(),
+                content = "Content\ncontent2\ncontent3".uppercase(),
+                showDivider = true
+            )
+
+            CommonUiListItemLarge(
+                title = "Title\ntitle2\ntitle3".uppercase(),
+                content = "Content\ncontent2\ncontent3".uppercase(),
+                leftIconResId = R.drawable.flag_am,
+                rightIconResId = R.drawable.ic_info_circle,
+                showDivider = true
+            )
+        }
     }
 }

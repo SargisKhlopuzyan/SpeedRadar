@@ -1,70 +1,62 @@
 package com.sargis.khlopuzyan.commonui.component.list
 
 import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.sargis.khlopuzyan.commonui.CommonUiTypography700
-import com.sargis.khlopuzyan.commonui.CommonUiTypography900
+import com.sargis.khlopuzyan.commonui.CommonUiTypography500
+import com.sargis.khlopuzyan.commonui.colorGray_7
 
 sealed class CommonUiListItemAttributes {
 
     abstract val height: Dp
     abstract val contentPadding: PaddingValues
-    abstract val cornerRadius: Dp
     abstract val titleStyle: TextStyle
     abstract val contentStyle: TextStyle
-    abstract val iconSize: Dp
+    abstract val leftIconSize: Dp
+    abstract val rightIconSize: Dp
     abstract val spaceBetweenIconAndText: Dp
+    abstract val dividerHeight: Dp
+    abstract val dividerColor: Color
     abstract val borderStrokeWidth: Dp
 
     data object Small : CommonUiListItemAttributes() {
-//        override val height = 36.dp
-        override val height = 48.dp
+        override val height = 44.dp
         override val contentPadding = PaddingValues(horizontal = 16.dp)
-        override val cornerRadius = 14.dp
-        override val titleStyle = CommonUiTypography900.bodySmall
-        override val contentStyle = CommonUiTypography900.bodySmall
-        override val iconSize = 22.dp
-        override val spaceBetweenIconAndText = 6.dp
+        override val titleStyle = CommonUiTypography500.bodySmall
+        override val contentStyle = CommonUiTypography500.bodySmall
+        override val leftIconSize = 22.dp
+        override val rightIconSize = 22.dp
+        override val spaceBetweenIconAndText = 16.dp
+        override val dividerHeight = 1.dp
+        override val dividerColor = colorGray_7
         override val borderStrokeWidth = 2.dp
     }
 
     data object Medium : CommonUiListItemAttributes() {
-//        override val height = 48.dp
-        override val height = 56.dp
+        override val height = 52.dp
         override val contentPadding = PaddingValues(horizontal = 16.dp)
-        override val cornerRadius = 18.dp
-        override val titleStyle = CommonUiTypography700.bodyMedium
-        override val contentStyle = CommonUiTypography700.bodyMedium
-        override val iconSize = 28.dp
-        override val spaceBetweenIconAndText = 8.dp
+        override val titleStyle = CommonUiTypography500.bodyMedium
+        override val contentStyle = CommonUiTypography500.bodyMedium
+        override val leftIconSize = 28.dp
+        override val rightIconSize = 28.dp
+        override val spaceBetweenIconAndText = 16.dp
+        override val dividerHeight = 1.dp
+        override val dividerColor = colorGray_7
         override val borderStrokeWidth = 2.dp
     }
 
     data object Large : CommonUiListItemAttributes() {
-//        override val height = 56.dp
         override val height = 64.dp
         override val contentPadding = PaddingValues(horizontal = 16.dp)
-        override val cornerRadius = 18.dp
-        override val titleStyle = CommonUiTypography700.bodyLarge
-        override val contentStyle = CommonUiTypography700.bodyLarge
-        override val iconSize = 28.dp
-        override val spaceBetweenIconAndText = 8.dp
+        override val titleStyle = CommonUiTypography500.bodyLarge
+        override val contentStyle = CommonUiTypography500.bodyLarge
+        override val leftIconSize = 28.dp
+        override val rightIconSize = 28.dp
+        override val spaceBetweenIconAndText = 16.dp
+        override val dividerHeight = 1.dp
+        override val dividerColor = colorGray_7
         override val borderStrokeWidth = 2.dp
     }
-
-    data class DynamicListItem(
-        override val height: Dp = 40.dp,
-        override val contentPadding: PaddingValues = PaddingValues(
-            horizontal = 16.dp,
-            vertical = 8.dp,
-        ),
-        override val cornerRadius: Dp = 16.dp,
-        override val titleStyle: TextStyle = CommonUiTypography700.bodyMedium,
-        override val contentStyle: TextStyle = CommonUiTypography700.bodyMedium,
-        override val iconSize: Dp = 19.dp,
-        override val spaceBetweenIconAndText: Dp = 6.8.dp,
-        override val borderStrokeWidth: Dp = 2.dp,
-    ) : CommonUiListItemAttributes()
 }

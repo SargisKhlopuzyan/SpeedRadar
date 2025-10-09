@@ -10,7 +10,9 @@ import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
+import com.sargis.khlopuzyan.commonui.CommonUiTheme
 import com.sargis.khlopuzyan.commonui.component.appBar.CommonTopAppBar
+import com.sargis.khlopuzyan.commonui.component.list.CommonUiListItemHeaderSmall
 import com.sargis.khlopuzyan.commonui.component.list.CommonUiListItemMedium
 import com.sargis.khlopuzyan.presentation.R
 
@@ -31,8 +33,60 @@ fun SettingsScreen(navController: NavController) {
                 .fillMaxSize()
                 .padding(innerPadding)
         ) {
+
             item {
-                CommonUiListItemMedium(title = "Country")
+                CommonUiListItemHeaderSmall(
+                    header = stringResource(R.string.select_your_country),
+                    showDivider = false
+                )
+            }
+
+            item {
+                CommonUiListItemMedium(
+                    leftIconResId = com.sargis.khlopuzyan.commonui.R.drawable.flag_am,
+                    title = stringResource(R.string.country),
+                    content = stringResource(R.string.country),
+                    showDivider = true
+                )
+            }
+
+            item {
+                CommonUiListItemMedium(
+                    leftIconResId = com.sargis.khlopuzyan.commonui.R.drawable.seek_right,
+                    title = stringResource(R.string.update_warnings_database),
+                    showDivider = false
+                )
+            }
+
+            item {
+                CommonUiListItemHeaderSmall(
+                    header = stringResource(R.string.warnings_speed_radar),
+                    showDivider = false
+                )
+            }
+
+            item {
+                CommonUiListItemMedium(
+                    leftIconResId = com.sargis.khlopuzyan.commonui.R.drawable.close,
+                    title = stringResource(R.string.configure_alerts),
+                    showDivider = true
+                )
+            }
+
+            item {
+                CommonUiListItemMedium(
+                    leftIconResId = com.sargis.khlopuzyan.commonui.R.drawable.close,
+                    title = stringResource(R.string.adjust_volume),
+                    showDivider = true
+                )
+            }
+
+            item {
+                CommonUiListItemMedium(
+                    leftIconResId = com.sargis.khlopuzyan.commonui.R.drawable.close,
+                    title = stringResource(R.string.visual_warnings),
+                    showDivider = false
+                )
             }
         }
     }
@@ -41,5 +95,7 @@ fun SettingsScreen(navController: NavController) {
 @Preview(showBackground = true)
 @Composable
 fun SettingsScreenPreview() {
-    SettingsScreen(rememberNavController())
+    CommonUiTheme {
+        SettingsScreen(rememberNavController())
+    }
 }

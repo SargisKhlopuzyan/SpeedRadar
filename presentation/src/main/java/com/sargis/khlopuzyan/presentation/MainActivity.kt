@@ -4,8 +4,8 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import com.sargis.khlopuzyan.commonui.CommonUiTheme
 import com.sargis.khlopuzyan.presentation.ui.navigation.Navigation
-import com.sargis.khlopuzyan.presentation.ui.theme.SpeedRadarTheme
 
 class MainActivity : ComponentActivity() {
 
@@ -13,7 +13,7 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            SpeedRadarTheme {
+            CommonUiTheme {
                 Navigation()
             }
         }

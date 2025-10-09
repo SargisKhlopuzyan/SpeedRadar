@@ -7,10 +7,9 @@ import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -19,7 +18,7 @@ import androidx.compose.material3.ButtonColors
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.LocalContentColor
-import androidx.compose.material3.Surface
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
@@ -39,14 +38,14 @@ import androidx.compose.ui.unit.TextUnit
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.sargis.khlopuzyan.commonui.CommonUiTheme
-//import com.sargis.khlopuzyan.commonui.CommonUiTheme
 import com.sargis.khlopuzyan.commonui.CommonUiTypography900
 import com.sargis.khlopuzyan.commonui.R
-import com.sargis.khlopuzyan.commonui.colorBlack
 import com.sargis.khlopuzyan.commonui.colorGray_11
 import com.sargis.khlopuzyan.commonui.colorGray_13
 import com.sargis.khlopuzyan.commonui.colorGray_9
-import com.sargis.khlopuzyan.commonui.colorWhite
+import com.sargis.khlopuzyan.commonui.colorLightGrey
+import com.sargis.khlopuzyan.commonui.colorPrimary
+import com.sargis.khlopuzyan.commonui.colorRed
 import com.sargis.khlopuzyan.commonui.util.NoRippleInteractionSource
 
 @Composable
@@ -63,7 +62,6 @@ private fun CommonUiButton(
     overflow: TextOverflow = TextOverflow.Ellipsis,
     border: BorderStroke? = null,
     colors: ButtonColors = ButtonDefaults.buttonColors(),
-//    attributes: CommonUiButtonAttributes = CommonUiTheme.buttonStyle.medium,
     attributes: CommonUiButtonAttributes = CommonUiButtonAttributes.Medium,
     onClick: () -> Unit = {},
 ) {
@@ -122,13 +120,12 @@ fun CommonUiPrimaryButton(
     textLetterSpacing: TextUnit = 0.sp,
     maxLines: Int = 1,
     overflow: TextOverflow = TextOverflow.Ellipsis,
-//    attributes: CommonUiButtonAttributes = CommonUiTheme.buttonStyle.medium,
     attributes: CommonUiButtonAttributes = CommonUiButtonAttributes.Medium,
     onClick: () -> Unit = {},
 ) {
     val colors = ButtonDefaults.buttonColors(
-        containerColor = colorBlack,
-        contentColor = colorWhite,
+        containerColor = MaterialTheme.colorScheme.primary,
+        contentColor = MaterialTheme.colorScheme.onPrimary,
         disabledContainerColor = colorGray_13,
         disabledContentColor = colorGray_9,
     )
@@ -161,16 +158,15 @@ fun CommonUiSecondaryButton(
     textLetterSpacing: TextUnit = 0.sp,
     maxLines: Int = 1,
     overflow: TextOverflow = TextOverflow.Ellipsis,
-//    attributes: CommonUiButtonAttributes = CommonUiTheme.buttonStyle.medium,
     attributes: CommonUiButtonAttributes = CommonUiButtonAttributes.Medium,
     onClick: () -> Unit = {},
 ) {
-    val borderColor: Color = if (enabled) colorBlack else colorGray_11
+    val borderColor: Color = if (enabled) colorPrimary else colorGray_11
 
     val colors = ButtonDefaults.buttonColors(
-        containerColor = colorWhite,
-        contentColor = colorBlack,
-        disabledContainerColor = colorWhite,
+        containerColor = colorLightGrey,
+        contentColor = colorPrimary,
+        disabledContainerColor = colorLightGrey,
         disabledContentColor = colorGray_11,
     )
 
@@ -220,121 +216,103 @@ fun CommonUiContainerButton(
 @Preview
 private fun CommonUiButtonsPreviews() {
     CommonUiTheme {
-        Surface {
-            Column(
-                modifier = Modifier.padding(16.dp),
-                verticalArrangement = Arrangement.spacedBy(10.dp),
-            ) {
-                // Primary button
-                CommonUiPrimaryButton(
-                    text = "Text".uppercase(),
-//                    attributes = CommonUiTheme.buttonStyle.small,
-                    attributes = CommonUiButtonAttributes.Small,
-                )
+        Column(
+            modifier = Modifier.fillMaxSize(),
+            verticalArrangement = Arrangement.spacedBy(4.dp),
+        ) {
+            CommonUiPrimaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.Small,
+            )
 
-                CommonUiPrimaryButton(
-                    text = "Text",
-//                    attributes = CommonUiTheme.buttonStyle.medium,
-                    attributes = CommonUiButtonAttributes.Medium,
-                )
+            CommonUiSecondaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.Small,
+            )
 
-                Row {
-                    CommonUiPrimaryButton(
-                        modifier = Modifier.weight(1F),
-                        text = "Text",
-//                        attributes = CommonUiTheme.buttonStyle.medium,
-                        attributes = CommonUiButtonAttributes.Medium,
-                    )
-                    Spacer(modifier = Modifier.width(20.dp))
-                    CommonUiPrimaryButton(
-                        modifier = Modifier.weight(1F),
-                        text = "Text",
-//                        attributes = CommonUiTheme.buttonStyle.medium,
-                        attributes = CommonUiButtonAttributes.Medium,
-                    )
-                }
+            CommonUiPrimaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.Medium,
+            )
 
-                CommonUiPrimaryButton(
-                    text = "Text",
-//                    attributes = CommonUiTheme.buttonStyle.large,
-                    attributes = CommonUiButtonAttributes.Large,
-                )
+            CommonUiSecondaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.Medium,
+            )
 
-                CommonUiPrimaryButton(
-                    text = "Text",
-//                    attributes = CommonUiTheme.buttonStyle.medium,
-                    attributes = CommonUiButtonAttributes.Medium,
-                    iconResId = R.drawable.ic_info_circle,
-                )
+            CommonUiPrimaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.Large,
+            )
 
-                CommonUiPrimaryButton(
-                    text = "Text",
-//                    attributes = CommonUiTheme.buttonStyle.medium,
-                    attributes = CommonUiButtonAttributes.Medium,
-                    iconResId = R.drawable.ic_info_circle,
-                    enabled = false,
-                )
+            CommonUiSecondaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.Large,
+            )
 
-                // Secondary button
+            CommonUiPrimaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.Medium,
+                iconResId = R.drawable.ic_info_circle,
+            )
 
-                CommonUiSecondaryButton(
-                    text = "Text".uppercase(),
-//                    attributes = CommonUiTheme.buttonStyle.small,
-                    attributes = CommonUiButtonAttributes.Small,
-                )
+            CommonUiSecondaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.Medium,
+                iconResId = R.drawable.ic_info_circle,
+            )
 
-                CommonUiSecondaryButton(
-                    text = "Text",
-//                    attributes = CommonUiTheme.buttonStyle.medium,
-                    attributes = CommonUiButtonAttributes.Medium,
-                )
+            CommonUiPrimaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.Large,
+                iconResId = R.drawable.ic_info_circle,
+                enabled = false,
+            )
 
-                CommonUiSecondaryButton(
-                    text = "Text",
-//                    attributes = CommonUiTheme.buttonStyle.large,
-                    attributes = CommonUiButtonAttributes.Large,
-                )
+            CommonUiSecondaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.Large,
+                iconResId = R.drawable.ic_info_circle,
+                enabled = false,
+            )
 
-                CommonUiSecondaryButton(
-                    text = "Text",
-//                    attributes = CommonUiTheme.buttonStyle.medium,
-                    attributes = CommonUiButtonAttributes.Medium,
-                    iconResId = R.drawable.ic_info_circle,
-                )
+            CommonUiPrimaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.DynamicButton(),
+                iconResId = R.drawable.ic_info_circle,
+            )
 
-                CommonUiSecondaryButton(
-                    text = "Text",
-//                    attributes = CommonUiTheme.buttonStyle.medium,
-                    attributes = CommonUiButtonAttributes.Medium,
-                    iconResId = R.drawable.ic_info_circle,
-                    enabled = false,
-                )
+            CommonUiSecondaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.DynamicButton(),
+                iconResId = R.drawable.ic_info_circle,
+            )
 
-                CommonUiPrimaryButton(
-                    text = "Text",
-                    attributes = CommonUiButtonAttributes.DynamicButton(),
-                    iconResId = R.drawable.ic_info_circle,
-                )
+            CommonUiPrimaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.DynamicButton(
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    cornerRadius = 10.dp,
+                    textStyle = CommonUiTypography900.bodyMedium,
+                    iconSize = 19.dp,
+                    spaceBetweenIconAndText = 6.8.dp,
+                    borderStrokeWidth = 4.dp,
+                ),
+                iconResId = R.drawable.ic_info_circle,
+            )
 
-                CommonUiSecondaryButton(
-                    text = "Text",
-                    attributes = CommonUiButtonAttributes.DynamicButton(),
-                    iconResId = R.drawable.ic_info_circle,
-                )
-
-                CommonUiSecondaryButton(
-                    text = "Text",
-                    attributes = CommonUiButtonAttributes.DynamicButton(
-                        contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
-                        cornerRadius = 10.dp,
-                        textStyle = CommonUiTypography900.bodyMedium,
-                        iconSize = 19.dp,
-                        spaceBetweenIconAndText = 6.8.dp,
-                        borderStrokeWidth = 4.dp,
-                    ),
-                    iconResId = R.drawable.ic_info_circle,
-                )
-            }
+            CommonUiSecondaryButton(
+                text = "Text".uppercase(),
+                attributes = CommonUiButtonAttributes.DynamicButton(
+                    contentPadding = PaddingValues(horizontal = 16.dp, vertical = 8.dp),
+                    cornerRadius = 10.dp,
+                    textStyle = CommonUiTypography900.bodyMedium,
+                    iconSize = 19.dp,
+                    spaceBetweenIconAndText = 6.8.dp,
+                    borderStrokeWidth = 4.dp,
+                ),
+                iconResId = R.drawable.ic_info_circle,
+            )
         }
     }
 }
