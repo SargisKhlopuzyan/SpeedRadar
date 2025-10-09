@@ -1,6 +1,7 @@
 package com.sargis.khlopuzyan.presentation.ui.main
 
 import android.Manifest
+import android.app.Activity
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -9,7 +10,10 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -17,6 +21,8 @@ import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
 import androidx.navigation.NavController
+import androidx.navigation.NavGraph.Companion.findStartDestination
+import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -26,6 +32,7 @@ import com.sargis.khlopuzyan.commonui.CommonUiTheme
 import com.sargis.khlopuzyan.commonui.component.appBar.CommonTopAppBar
 import com.sargis.khlopuzyan.commonui.component.button.CommonUiPrimaryButton
 import com.sargis.khlopuzyan.presentation.R
+import com.sargis.khlopuzyan.presentation.ui.navigation.NavRoute
 import com.sargis.khlopuzyan.presentation.util.isPermanentlyDenied
 
 @OptIn(ExperimentalPermissionsApi::class)
@@ -33,7 +40,6 @@ import com.sargis.khlopuzyan.presentation.util.isPermanentlyDenied
 fun MainScreen(
     navController: NavController,
     onStartObservingLocation: () -> Unit,
-    onNavigateSettingsScreen: () -> Unit,
 ) {
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(
@@ -56,12 +62,64 @@ fun MainScreen(
         }
     })
 
+    val btmNavItems = listOf(
+        BtmNavItem(
+            route = NavRoute.PopUpView.route,
+            selectedIcon = com.sargis.khlopuzyan.commonui.R.drawable.ic_pop_up_view,
+            unselectedIcon = com.sargis.khlopuzyan.commonui.R.drawable.ic_pop_up_view_outline,
+            name = "PopUpView"
+        ),
+        BtmNavItem(
+            route = NavRoute.StartInBackground.route,
+            selectedIcon = com.sargis.khlopuzyan.commonui.R.drawable.ic_minimize,
+            unselectedIcon = com.sargis.khlopuzyan.commonui.R.drawable.ic_minimize_outline,
+            name = "Minimize"
+        ),
+        BtmNavItem(
+            route = NavRoute.Settings.route,
+            selectedIcon = com.sargis.khlopuzyan.commonui.R.drawable.ic_settings,
+            unselectedIcon = com.sargis.khlopuzyan.commonui.R.drawable.ic_settings_outline,
+            name = "Settings"
+        )
+    )
+
+    val showBottomBar = remember { mutableStateOf(true) }
+    val context = LocalContext.current
+
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CommonTopAppBar(
                 title = stringResource(R.string.map)
             )
+        },
+        bottomBar = {
+//            if (showBottomBar.value) {
+            MainBottomBar(
+                destinations = btmNavItems,
+                currentDestination = navController.currentBackStackEntryAsState().value?.destination,
+                onNavigateToDestination = {
+                    when (it) {
+                        NavRoute.Settings.route -> {
+                            navController.navigate(it) {
+                                popUpTo(navController.graph.findStartDestination().id) {
+                                    saveState = true
+                                }
+                                restoreState = true
+                                launchSingleTop = true
+                            }
+                        }
+
+                        NavRoute.PopUpView.route -> {
+                        }
+
+                        NavRoute.StartInBackground.route -> {
+                            (context as? Activity)?.moveTaskToBack(true)
+                        }
+                    }
+                }
+            )
+//            }
         }
     ) { innerPadding ->
         Column(
@@ -70,11 +128,6 @@ fun MainScreen(
                 .padding(innerPadding)
                 .padding(16.dp)
         ) {
-
-            CommonUiPrimaryButton(
-                text = "Navigate Settings Screen",
-                onClick = onNavigateSettingsScreen
-            )
 
             permissionsState.permissions.forEach { perm ->
                 when (perm.permission) {
@@ -110,7 +163,7 @@ fun MainScreen(
                                     color = MaterialTheme.colorScheme.onTertiary,
                                     text = "Coarse Location permission accepted"
                                 )
-                                
+
                                 CommonUiPrimaryButton(
                                     text = "Start observing location",
                                     onClick = {
@@ -142,7 +195,6 @@ fun MainScreenPreview() {
         MainScreen(
             navController = navController,
             onStartObservingLocation = {},
-            onNavigateSettingsScreen = {}
         )
     }
 }

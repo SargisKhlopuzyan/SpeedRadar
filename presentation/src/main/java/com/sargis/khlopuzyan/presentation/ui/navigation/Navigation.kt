@@ -16,22 +16,19 @@ fun Navigation() {
     val navController = rememberNavController()
     NavHost(
         navController = navController,
-        startDestination = ScreenRoute.MainScreen.route
+        startDestination = NavRoute.Main.route
     ) {
-        composable(route = ScreenRoute.MainScreen.route) {
+        composable(route = NavRoute.Main.route) {
             val viewModel: MainViewModel = koinViewModel()
             MainScreen(
                 navController,
                 onStartObservingLocation = {
                     viewModel.onEvent(MainUiEvent.StartObservingLocation)
-                },
-                onNavigateSettingsScreen = {
-                    navController.navigate(ScreenRoute.SettingsScreen.route)
                 }
             )
         }
 
-        composable(route = ScreenRoute.SettingsScreen.route) {
+        composable(route = NavRoute.Settings.route) {
             val viewModel: SettingsViewModel = koinViewModel()
             SettingsScreen(navController)
         }
