@@ -1,4 +1,4 @@
-package com.sargis.khlopuzyan.presentation.ui.main
+package com.sargis.khlopuzyan.presentation.ui.radar
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
@@ -8,14 +8,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class MainViewModel(
+class RadarViewModel(
     private val currentLocationUseCase: CurrentLocationUseCase,
-) : BaseViewModel<MainUiState, MainUiEvent>() {
+) : BaseViewModel<RadarUiState, RadarUiEvent>() {
 
-    override val _uiState: MutableStateFlow<MainUiState>
-        get() = MutableStateFlow(MainUiState())
+    override val _uiState: MutableStateFlow<RadarUiState>
+        get() = MutableStateFlow(RadarUiState())
 
-    override fun onEvent(event: MainUiEvent) {
+    override fun onEvent(event: RadarUiEvent) {
+        when (event) {
+            RadarUiEvent.StartObservingLocation -> {
+                observeLocation()
+            }
+
+            RadarUiEvent.StopObservingLocation -> TODO()
+        }
     }
 
     private fun observeLocation() {

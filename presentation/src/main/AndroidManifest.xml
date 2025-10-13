@@ -7,10 +7,15 @@
             android:enabled="true"
             android:exported="false" />
 
+        <receiver android:name=".MainActivity$PiPReceiver" />
+
         <activity
             android:name=".MainActivity"
+            android:configChanges="screenSize|smallestScreenSize|screenLayout|orientation"
             android:exported="true"
+            android:launchMode="singleTask"
             android:label="@string/app_name"
+            android:supportsPictureInPicture="true"
             android:theme="@style/Theme.SpeedRadar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

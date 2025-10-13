@@ -1,4 +1,4 @@
-package com.sargis.khlopuzyan.presentation.ui.main
+package com.sargis.khlopuzyan.presentation.ui.map
 
 import android.util.Log
 import androidx.lifecycle.viewModelScope
@@ -8,14 +8,21 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.launch
 
-class MainViewModel(
+class MapViewModel(
     private val currentLocationUseCase: CurrentLocationUseCase,
-) : BaseViewModel<MainUiState, MainUiEvent>() {
+) : BaseViewModel<MapUiState, MapUiEvent>() {
 
-    override val _uiState: MutableStateFlow<MainUiState>
-        get() = MutableStateFlow(MainUiState())
+    override val _uiState: MutableStateFlow<MapUiState>
+        get() = MutableStateFlow(MapUiState())
 
-    override fun onEvent(event: MainUiEvent) {
+    override fun onEvent(event: MapUiEvent) {
+        when (event) {
+            MapUiEvent.StartObservingLocation -> {
+                observeLocation()
+            }
+
+            MapUiEvent.StopObservingLocation -> TODO()
+        }
     }
 
     private fun observeLocation() {

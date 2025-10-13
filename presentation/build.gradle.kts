@@ -53,6 +53,8 @@ dependencies {
     implementation(libs.androidx.appcompat)
 //    implementation(libs.material)
 
+    implementation (libs.androidx.window)
+
     // Injection Koin
     implementation(libs.koin.android)
     implementation(libs.koin.androidx.compose) // koinViewModel
