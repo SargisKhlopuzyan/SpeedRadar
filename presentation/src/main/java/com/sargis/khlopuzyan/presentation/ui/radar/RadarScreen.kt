@@ -1,7 +1,6 @@
 package com.sargis.khlopuzyan.presentation.ui.radar
 
 import android.Manifest
-import android.graphics.Rect
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
@@ -11,10 +10,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.toAndroidRect
-import androidx.compose.ui.layout.boundsInWindow
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,6 +32,7 @@ import com.sargis.khlopuzyan.presentation.util.isPermanentlyDenied
 @Composable
 fun RadarScreen(
     navController: NavController,
+    isPiPMode: Boolean = false,
     onStartObservingLocation: () -> Unit,
 ) {
     val permissionsState = rememberMultiplePermissionsState(
@@ -63,9 +59,11 @@ fun RadarScreen(
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
-            CommonTopAppBar(
-                title = stringResource(R.string.radar)
-            )
+            if (!isPiPMode) {
+                CommonTopAppBar(
+                    title = stringResource(R.string.radar)
+                )
+            }
         },
     ) { innerPadding ->
         Column(

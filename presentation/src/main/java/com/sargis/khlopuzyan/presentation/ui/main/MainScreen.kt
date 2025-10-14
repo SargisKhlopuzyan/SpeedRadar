@@ -11,6 +11,7 @@ import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.sargis.khlopuzyan.presentation.ui.navigation.BottomNavigation
 import com.sargis.khlopuzyan.presentation.ui.navigation.NavRoute
+import com.sargis.khlopuzyan.presentation.ui.radar.RadarScreen
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -102,6 +103,10 @@ fun MainScreen(
                         }
                     }
                 )
+            } else {
+                RadarScreen(navController, isPiPMode = true) {
+
+                }
             }
         }
     ) { contentPadding ->
