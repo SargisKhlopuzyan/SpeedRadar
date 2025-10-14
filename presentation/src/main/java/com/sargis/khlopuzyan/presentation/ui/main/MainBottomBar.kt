@@ -13,11 +13,10 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.res.vectorResource
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavDestination
-import androidx.navigation.NavDestination.Companion.hierarchy
 
 @Composable
 fun MainBottomBar(
-    destinations: List<BtmNavItem>,
+    btmNavItems: List<BtmNavItem>,
     currentDestination: NavDestination?,
     onNavigateToDestination: (route: String) -> Unit,
 ) {
@@ -32,19 +31,20 @@ fun MainBottomBar(
 //            .height(70.dp),
         containerColor = Color.Transparent
     ) {
-        destinations.forEach { destination ->
-            val selected =
-                currentDestination?.hierarchy?.any { it.route == destination.route } == true
+        btmNavItems.forEach { btmNavItem ->
+
+            val selected = btmNavItem.route == currentDestination?.route
+
             NavigationBarItem(
                 selected = selected,
                 onClick = {
-                    onNavigateToDestination(destination.route)
+                    onNavigateToDestination(btmNavItem.route)
                 },
                 icon = {
                     val icon = if (selected) {
-                        destination.selectedIcon
+                        btmNavItem.selectedIcon
                     } else {
-                        destination.unselectedIcon
+                        btmNavItem.unselectedIcon
                     }
                     Icon(
                         imageVector = ImageVector.vectorResource(icon),

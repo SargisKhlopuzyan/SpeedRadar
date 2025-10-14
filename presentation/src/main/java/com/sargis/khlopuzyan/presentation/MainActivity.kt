@@ -20,7 +20,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.window.layout.WindowMetricsCalculator
 import com.sargis.khlopuzyan.commonui.CommonUiTheme
-import com.sargis.khlopuzyan.presentation.ui.navigation.Navigation
+import com.sargis.khlopuzyan.presentation.ui.main.MainScreen
 
 
 class MainActivity : ComponentActivity() {
@@ -51,11 +51,14 @@ class MainActivity : ComponentActivity() {
         enableEdgeToEdge()
         setContent {
             CommonUiTheme {
-                Navigation(
-                    showBottomBar = pipMode != PipMode.MODE_PIP,
-                    onPiPCallback = {
-                        showInPipMode()
-                    }
+                val showBottomBar = pipMode != PipMode.MODE_PIP
+                val onPiPCallback = {
+                    showInPipMode()
+                }
+
+                MainScreen(
+                    showBottomBar,
+                    onPiPCallback = onPiPCallback
                 )
             }
         }
@@ -148,7 +151,6 @@ class MainActivity : ComponentActivity() {
 }
 
 enum class PipMode {
-    //    MODE_NONE,
     MODE_FULL,
     MODE_PIP
 }
