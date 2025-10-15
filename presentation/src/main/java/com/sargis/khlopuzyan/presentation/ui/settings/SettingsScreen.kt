@@ -8,8 +8,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.res.stringResource
 import androidx.compose.ui.tooling.preview.Preview
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.sargis.khlopuzyan.commonui.CommonUiTheme
 import com.sargis.khlopuzyan.commonui.component.appBar.CommonTopAppBar
 import com.sargis.khlopuzyan.commonui.component.list.CommonUiListItemHeaderSmall
@@ -17,15 +15,15 @@ import com.sargis.khlopuzyan.commonui.component.list.CommonUiListItemMedium
 import com.sargis.khlopuzyan.presentation.R
 
 @Composable
-fun SettingsScreen(navController: NavController) {
+fun SettingsScreen(
+    uiState: SettingsUiState,
+) {
     Scaffold(
         modifier = Modifier.fillMaxSize(),
         topBar = {
             CommonTopAppBar(
                 title = stringResource(R.string.settings)
-            ) {
-                navController.popBackStack()
-            }
+            )
         }
     ) { innerPadding ->
         LazyColumn(
@@ -96,6 +94,8 @@ fun SettingsScreen(navController: NavController) {
 @Composable
 fun SettingsScreenPreview() {
     CommonUiTheme {
-        SettingsScreen(rememberNavController())
+        SettingsScreen(
+            SettingsUiState()
+        )
     }
 }

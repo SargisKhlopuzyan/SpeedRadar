@@ -4,14 +4,18 @@ import android.app.Activity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.sargis.khlopuzyan.presentation.ui.navigation.BottomNavigation
 import com.sargis.khlopuzyan.presentation.ui.navigation.NavRoute
 import com.sargis.khlopuzyan.presentation.ui.radar.RadarScreen
+import com.sargis.khlopuzyan.presentation.ui.radar.RadarViewModel
+import org.koin.androidx.compose.koinViewModel
 
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
@@ -51,7 +55,6 @@ fun MainScreen(
             name = "Settings"
         )
     )
-
     val navController = rememberNavController()
     val currentDestination = navController.currentBackStackEntryAsState().value?.destination
 
@@ -104,9 +107,13 @@ fun MainScreen(
                     }
                 )
             } else {
-                RadarScreen(navController, isPiPMode = true) {
-
-                }
+                val viewModel = koinViewModel<RadarViewModel>()
+                val uiState by viewModel.uiState.collectAsStateWithLifecycle()
+                RadarScreen(
+                    uiState,
+                    isPiPMode = true,
+                    onEvent = viewModel::onEvent
+                )
             }
         }
     ) { contentPadding ->

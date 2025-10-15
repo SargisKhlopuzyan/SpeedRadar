@@ -16,7 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavController
 import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
@@ -31,9 +30,9 @@ import com.sargis.khlopuzyan.presentation.util.isPermanentlyDenied
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun RadarScreen(
-    navController: NavController,
+    uiState: RadarUiState,
     isPiPMode: Boolean = false,
-    onStartObservingLocation: () -> Unit,
+    onEvent: (RadarUiEvent) -> Unit,
 ) {
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(
@@ -110,7 +109,7 @@ fun RadarScreen(
                                 CommonUiPrimaryButton(
                                     text = "Start observing location",
                                     onClick = {
-                                        onStartObservingLocation()
+                                        onEvent(RadarUiEvent.StartObservingLocation)
                                     }
                                 )
                             }
@@ -136,8 +135,8 @@ fun RadarScreenPreview() {
     CommonUiTheme {
         val navController = rememberNavController()
         RadarScreen(
-            navController = navController,
-            onStartObservingLocation = {},
+            uiState = RadarUiState(),
+            onEvent = {},
         )
     }
 }

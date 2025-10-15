@@ -24,8 +24,6 @@ fun MainBottomBar(
 //        modifier = Modifier
 //            .windowInsetsPadding(
 //                WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal + WindowInsetsSides.Bottom)
-//                WindowInsets.safeDrawing.only(WindowInsetsSides.Bottom)
-//                WindowInsets.safeDrawing.only(WindowInsetsSides.Horizontal)
 //            ),
 //            .fillMaxWidth()
 //            .height(70.dp),

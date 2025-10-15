@@ -16,8 +16,6 @@ import androidx.compose.ui.unit.dp
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver
 import androidx.lifecycle.compose.LocalLifecycleOwner
-import androidx.navigation.NavController
-import androidx.navigation.compose.rememberNavController
 import com.google.accompanist.permissions.ExperimentalPermissionsApi
 import com.google.accompanist.permissions.isGranted
 import com.google.accompanist.permissions.rememberMultiplePermissionsState
@@ -31,8 +29,8 @@ import com.sargis.khlopuzyan.presentation.util.isPermanentlyDenied
 @OptIn(ExperimentalPermissionsApi::class)
 @Composable
 fun MapScreen(
-    navController: NavController,
-    onStartObservingLocation: () -> Unit,
+    uiState: MapUiState,
+    onEvent: (MapUiEvent) -> Unit,
 ) {
     val permissionsState = rememberMultiplePermissionsState(
         permissions = listOf(
@@ -107,7 +105,7 @@ fun MapScreen(
                                 CommonUiPrimaryButton(
                                     text = "Start observing location",
                                     onClick = {
-                                        onStartObservingLocation()
+                                        onEvent(MapUiEvent.StartObservingLocation)
                                     }
                                 )
                             }
@@ -131,10 +129,9 @@ fun MapScreen(
 @Composable
 fun MapScreenPreview() {
     CommonUiTheme {
-        val navController = rememberNavController()
         MapScreen(
-            navController = navController,
-            onStartObservingLocation = {},
+            uiState = MapUiState(),
+            onEvent = {},
         )
     }
 }
